@@ -1,10 +1,75 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, ToastAndroid } from 'react-native';
 import { useRouter } from "expo-router";
-import React from 'react';
+import React, { useState } from 'react';
 import Color from '../../constant/Color';
+import { auth } from './../../config/FirebaseConfig';
+import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
+import * as Google from 'expo-auth-session/providers/google';
+import * as WebBrowser from 'expo-web-browser';
+
+WebBrowser.maybeCompleteAuthSession();
 
 export default function SignIn() {
    const router = useRouter();
+   const [email,setEmail] = useState();
+   const [password,setPassword] = useState();
+
+   const [request, response, promptAsync] = Google.useAuthRequest({
+      expoClientId: "1060622069160-o567l17bq4l0anlpfn9kifuk7he9udnm.apps.googleusercontent.com",
+      androidClientId: "1060622069160-o567l17bq4l0anlpfn9kifuk7he9udnm.apps.googleusercontent.com",
+      // iosClientId: "YOUR_IOS_CLIENT_ID.apps.googleusercontent.com",
+   });
+
+   const onSignInClick = () =>{
+
+      if(!email || !password){
+         ToastAndroid.show("Enter all the details",ToastAndroid.BOTTOM);
+         return ;
+
+      }
+      signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+         const user = userCredential.user;
+         console.log(user);
+         router.replace('(tabs)');
+      })
+      .catch((error) => {
+         const errorCode = error.code;
+         const errorMessage = error.message;
+         if(errorCode=='auth/invalid-credential'){
+            ToastAndroid.show('Invalid credential',ToastAndroid.BOTTOM)
+         }
+      });
+   }
+
+   const signInWithGoogle = async () => {
+      try {
+         // Start Google sign-in process
+         const result = await promptAsync();
+
+         if (result?.type === 'success') {
+            const { id_token } = result.params;
+            const credential = GoogleAuthProvider.credential(id_token);
+
+            // Sign in to Firebase with Google credential
+            signInWithCredential(auth, credential)
+               .then((userCredential) => {
+                  console.log('Google Sign-In successful:', userCredential.user);
+                  router.replace('(tabs)');
+               })
+               .catch((error) => {
+                  console.error('Google Sign-In error:', error);
+                  ToastAndroid.show('Google Sign-In failed', ToastAndroid.BOTTOM);
+               });
+         } else {
+            console.log('Google Sign-In cancelled');
+         }
+      } catch (error) {
+         console.error('Google Sign-In error:', error);
+         ToastAndroid.show('Google Sign-In failed', ToastAndroid.BOTTOM);
+      }
+   };
+
    return (
       <View style={styles.container}>
          <Text style={styles.textHeader}>Sign In</Text>
@@ -14,6 +79,7 @@ export default function SignIn() {
                placeholder='email' 
                style={styles.textInput} 
                placeholderTextColor={Color.GRAY} 
+               onChangeText={(value) => setEmail(value)}
             />
          </View>
 
@@ -23,18 +89,33 @@ export default function SignIn() {
                style={styles.textInput} 
                secureTextEntry={true} 
                placeholderTextColor={Color.GRAY} 
+               onChangeText={(value)=> setPassword(value)}
             />
          </View>
 
          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button}>
-               <Text style={styles.buttonText} onPress={() => router.push("./(tabs)/index")}>Sign In</Text>
+            <TouchableOpacity 
+               style={styles.button} 
+               onPress={onSignInClick}
+            >
+               <Text style={styles.buttonText} >Sign In</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+               style={styles.button} 
+               onPress={() => router.push("login/signUp")}
+            >
+               <Text style={styles.buttonText} >Sign Up</Text>
             </TouchableOpacity>
          
 
-         <TouchableOpacity style={styles.googleButton}>
+         <TouchableOpacity 
+            style={styles.googleButton}
+            onPress={signInWithGoogle}
+            disabled={!request}
+         >
             <Image 
-               source={require("D:/Project react native/my-app/assets/images/google-logo.jpg")}
+               source={require("../../assets/images/google-logo.jpg")}
                style={styles.googleIcon}
             />
             <Text style={styles.googleButtonText}>Sign in with Google</Text>

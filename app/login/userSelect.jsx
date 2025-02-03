@@ -10,7 +10,7 @@ export default function UserSelect() {
       {/* Image Section */}
       <View style={styles.imageContainer}>
         <Image
-          source={require("D:/Project react native/my-app/assets/images/sign-in-edited.png")}
+          source={require("../../assets/images/sign-in-edited.png")}
           style={styles.image}
           resizeMode="contain"
         />

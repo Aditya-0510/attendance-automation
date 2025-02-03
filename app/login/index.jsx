@@ -12,7 +12,7 @@ export default function LoginScreen() {
       {/* Circular Image Wrapper */}
       <View style={styles.imageContainer}>
         <Image
-          source={require("D:/Project react native/my-app/assets/images/logo-new-edited.jpg")}
+          source={require("../../assets/images/logo-new-edited.jpg")}
           style={styles.image}
           resizeMode="contain"
         />
