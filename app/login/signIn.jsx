@@ -6,6 +6,7 @@ import { auth } from './../../config/FirebaseConfig';
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
 import * as Google from 'expo-auth-session/providers/google';
 import * as WebBrowser from 'expo-web-browser';
+import { makeRedirectUri } from 'expo-auth-session';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -15,9 +16,13 @@ export default function SignIn() {
    const [password,setPassword] = useState();
 
    const [request, response, promptAsync] = Google.useAuthRequest({
-      expoClientId: "1060622069160-o567l17bq4l0anlpfn9kifuk7he9udnm.apps.googleusercontent.com",
-      androidClientId: "1060622069160-o567l17bq4l0anlpfn9kifuk7he9udnm.apps.googleusercontent.com",
+      // expoClientId: "1060622069160-o567l17bq4l0anlpfn9kifuk7he9udnm.apps.googleusercontent.com",
+      // androidClientId: "1060622069160-ik1v1evddnm1ff6n4pcjs023h7kdbjlv.apps.googleusercontent.com",
       // iosClientId: "YOUR_IOS_CLIENT_ID.apps.googleusercontent.com",
+      clientId:"1060622069160-ik1v1evddnm1ff6n4pcjs023h7kdbjlv.apps.googleusercontent.com",
+      redirectUri: makeRedirectUri({
+         native: 'com.anonymous.myapp:/oauthredirect', // Replace with your package name
+       }),
    });
 
    const onSignInClick = () =>{
