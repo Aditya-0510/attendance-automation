@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
-import { useRouter } from "expo-router";
+import { useRouter , Stack} from "expo-router";
 import React, { useState, useCallback } from 'react';
 import { useOAuth, useSignIn } from '@clerk/clerk-expo';
 import * as Linking from 'expo-linking'
@@ -64,6 +64,13 @@ export default function SignIn() {
    }, [isLoaded, emailAddress, password]);
 
    return (
+      <>
+      <Stack.Screen
+        options={{
+          headerShown: false,
+          animation: "slide_from_right", // Enables the sliding transition
+        }}
+      />
       <View style={styles.container}>
          <Text style={styles.textHeader}>Sign In</Text>
 
@@ -107,6 +114,7 @@ export default function SignIn() {
             </TouchableOpacity>
          </View>
       </View>
+      </>
    );
 }
 
