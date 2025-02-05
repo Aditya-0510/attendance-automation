@@ -1,11 +1,18 @@
 import React from "react";
 import { View, Image, TouchableOpacity, Text, StyleSheet } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter , Stack} from "expo-router";
 
 export default function UserSelect() {
   const router = useRouter();
 
   return (
+    <>
+    <Stack.Screen
+        options={{
+          headerShown: false,
+          animation: "slide_from_right", // Enables the sliding transition
+        }}
+      />
     <View style={styles.container}>
       {/* Image Section */}
       <View style={styles.imageContainer}>
@@ -28,6 +35,7 @@ export default function UserSelect() {
         </TouchableOpacity>
       </View>
     </View>
+    </>
   );
 }
 
