@@ -19,11 +19,11 @@ export default function UserSelect() {
 
       {/* Buttons*/}
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={() => router.push("login/signIn")}>
+        <TouchableOpacity style={styles.button} onPress={() => router.push("auth/sign-in")}>
             <Text style={styles.buttonText}>Student</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={() => router.push("login/signIn")}>
+        <TouchableOpacity style={styles.button} onPress={() => router.push("auth/sign-in")}>
             <Text style={styles.buttonText}>Faculty</Text>
         </TouchableOpacity>
       </View>
