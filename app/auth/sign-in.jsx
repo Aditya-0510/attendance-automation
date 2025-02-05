@@ -32,12 +32,13 @@ export default function SignIn() {
 
       // If sign in was successful, set the active session
       if (createdSessionId) {
-        setActive!({ session: createdSessionId })
-        router.push('(home)');
-      } else {
-        // Use signIn or signUp returned from startOAuthFlow
-        // for next steps, such as MFA
-      }
+         setActive({ session: createdSessionId }); // Remove the '!'
+         router.push('(home)');
+       } else {
+         // Use signIn or signUp returned from startOAuthFlow
+         // for next steps, such as MFA
+       }
+       
     } catch (err) {
       // See https://clerk.com/docs/custom-flows/error-handling
       // for more info on error handling
