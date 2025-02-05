@@ -93,6 +93,10 @@ export default function SignIn() {
                <Text style={styles.buttonText}>Sign In</Text>
             </TouchableOpacity>
 
+            <TouchableOpacity style={styles.button} onPress={()=>router.push("/auth/sign-up")}>
+               <Text style={styles.buttonText}>Sign Up</Text>
+            </TouchableOpacity>
+
             <TouchableOpacity style={styles.googleButton} onPress={onPress}>
                <Image 
                   source={require("../../assets/images/google-logo.jpg")}
