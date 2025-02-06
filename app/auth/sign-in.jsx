@@ -1,21 +1,22 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
 import { useRouter , Stack} from "expo-router";
 import React, { useState, useCallback } from 'react';
 import { useOAuth, useSignIn } from '@clerk/clerk-expo';
 import * as Linking from 'expo-linking'
 import Color from '../../constant/Color';
 import * as WebBrowser from 'expo-web-browser'
+
 export const useWarmUpBrowser = () => {
   React.useEffect(() => {
-    // Warm up the android browser to improve UX
-    // https://docs.expo.dev/guides/authentication/#improving-user-experience
     void WebBrowser.warmUpAsync()
     return () => {
       void WebBrowser.coolDownAsync()
     }
   }, [])
 };
+
 WebBrowser.maybeCompleteAuthSession()
+
 export default function SignIn() {
   useWarmUpBrowser()
   const { startOAuthFlow } = useOAuth({ strategy: 'oauth_google' })
@@ -24,27 +25,25 @@ export default function SignIn() {
 
    const [emailAddress, setEmailAddress] = useState('');
    const [password, setPassword] = useState('');
+   
    const onPress = React.useCallback(async () => {
     try {
       const { createdSessionId, signIn, signUp, setActive } = await startOAuthFlow({
         redirectUrl: Linking.createURL('/dashboard', { scheme: 'myapp' }),
       })
 
-      // If sign in was successful, set the active session
       if (createdSessionId) {
-         setActive({ session: createdSessionId }); // Remove the '!'
+         setActive({ session: createdSessionId });
          router.push('(home)');
        } else {
-         // Use signIn or signUp returned from startOAuthFlow
-         // for next steps, such as MFA
+         Alert.alert('Google Sign-In', 'Unable to complete sign-in process');
        }
        
     } catch (err) {
-      // See https://clerk.com/docs/custom-flows/error-handling
-      // for more info on error handling
-      console.error(JSON.stringify(err, null, 2))
+      Alert.alert('Google Sign-In Error', err.message || 'An error occurred during Google sign-in');
     }
   }, [])
+   
    const onSignInPress = useCallback(async () => {
       if (!isLoaded) return;
       try {
@@ -56,10 +55,10 @@ export default function SignIn() {
             await setActive({ session: signInAttempt.createdSessionId });
             router.push('(home)');
          } else {
-            console.error(JSON.stringify(signInAttempt, null, 2));
+            Alert.alert('Sign In', 'Unable to complete sign-in process');
          }
       } catch (err) {
-         console.error(JSON.stringify(err, null, 2));
+         Alert.alert('Sign In Error', err.message || 'An error occurred during sign-in');
       }
    }, [isLoaded, emailAddress, password]);
 
@@ -68,7 +67,7 @@ export default function SignIn() {
       <Stack.Screen
         options={{
           headerShown: false,
-          animation: "slide_from_right", // Enables the sliding transition
+          animation: "slide_from_right",
         }}
       />
       <View style={styles.container}>
