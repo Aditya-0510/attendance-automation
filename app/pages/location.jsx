@@ -16,10 +16,10 @@ export default function AuthScreen() {
 
   // Define boundary
   const BOUNDARY = {
-    corner1: { lat: 15.397724, lng: 75.026841 },
-    corner2: { lat: 15.397687, lng: 75.020629 },
-    corner3: { lat: 15.387907, lng: 75.019605 },
-    corner4: { lat: 15.387280, lng: 75.027314 },
+    corner1: { lat: 15.3928349, lng: 75.0251171 },
+    corner2: { lat: 15.3927314, lng: 75.0251674 },
+    corner3: { lat: 15.3927683, lng: 75.0252418 },
+    corner4: { lat: 15.3928711, lng: 75.0251902 },
   };
 
   // Function to check if inside boundary
