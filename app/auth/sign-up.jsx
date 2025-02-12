@@ -1,30 +1,55 @@
 import * as React from 'react'
-import { Text, TextInput, Button, View, StyleSheet } from 'react-native'
+import { Text, TextInput, TouchableOpacity, View, StyleSheet, Alert } from 'react-native'
 import { useSignUp } from '@clerk/clerk-expo'
-import { useRouter } from 'expo-router'
+import { useRouter, Stack } from 'expo-router'
+import Color from '../../constant/Color'
 
 export default function SignUpScreen() {
   const { isLoaded, signUp, setActive } = useSignUp()
   const router = useRouter()
 
+  const [name, setName] = React.useState('')
   const [emailAddress, setEmailAddress] = React.useState('')
   const [password, setPassword] = React.useState('')
+  const [confirmPassword, setConfirmPassword] = React.useState('')
   const [pendingVerification, setPendingVerification] = React.useState(false)
   const [code, setCode] = React.useState('')
 
   const onSignUpPress = async () => {
     if (!isLoaded) return
 
+    if (!name.trim()) {
+      Alert.alert('Error', 'Please enter your name')
+      return
+    }
+
+    if (!emailAddress.trim()) {
+      Alert.alert('Error', 'Please enter your email')
+      return
+    }
+
+    if (!password.trim()) {
+      Alert.alert('Error', 'Please enter a password')
+      return
+    }
+
+    if (password !== confirmPassword) {
+      Alert.alert('Password Error', 'Passwords do not match')
+      return
+    }
+
     try {
-      // Proceed with sign-up directly without captcha
       await signUp.create({
         emailAddress,
         password,
+        firstName: name
       })
+
       await signUp.prepareEmailAddressVerification({ strategy: 'email_code' })
       setPendingVerification(true)
     } catch (err) {
-      console.error("Sign-up error:", JSON.stringify(err, null, 2))
+      Alert.alert('Sign Up Error', err.message || 'Unable to create account')
+      console.error('Signup error:', err)
     }
   }
 
@@ -38,72 +63,155 @@ export default function SignUpScreen() {
 
       if (signUpAttempt.status === 'complete') {
         await setActive({ session: signUpAttempt.createdSessionId })
-        router.replace('/')
+        router.replace('(home)')
       } else {
-        console.error("Verification error:", JSON.stringify(signUpAttempt, null, 2))
+        Alert.alert('Verification Error', 'Unable to complete verification')
       }
     } catch (err) {
-      console.error("Verification failed:", JSON.stringify(err, null, 2))
+      Alert.alert('Verification Failed', err.message || 'Verification process failed')
     }
   }
 
   if (pendingVerification) {
     return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Verify your email</Text>
-        <TextInput
-          style={styles.input}
-          value={code}
-          placeholder="Enter your verification code"
-          onChangeText={setCode}
+      <>
+        <Stack.Screen
+          options={{
+            headerShown: false,
+            animation: "slide_from_right",
+          }}
         />
-        <Button title="Verify" onPress={onVerifyPress} color="#007bff" />
-      </View>
+        <View style={styles.container}>
+          <Text style={styles.textHeader}>Verify Email</Text>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.textInput}
+              value={code}
+              placeholder="Enter verification code"
+              placeholderTextColor={Color.GRAY}
+              onChangeText={setCode}
+            />
+          </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.button} onPress={onVerifyPress}>
+              <Text style={styles.buttonText}>Verify</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </>
     )
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Sign up</Text>
-      <TextInput
-        style={styles.input}
-        autoCapitalize="none"
-        value={emailAddress}
-        placeholder="Enter email"
-        onChangeText={setEmailAddress}
+    <>
+      <Stack.Screen
+        options={{
+          headerShown: false,
+          animation: "slide_from_right",
+        }}
       />
-      <TextInput
-        style={styles.input}
-        value={password}
-        placeholder="Enter password"
-        secureTextEntry={true}
-        onChangeText={setPassword}
-      />
-      <Button title="Continue" onPress={onSignUpPress} color="#007bff" />
-    </View>
+      <View style={styles.container}>
+        <Text style={styles.textHeader}>Sign Up</Text>
+
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.textInput}
+            value={name}
+            placeholder="Enter name"
+            placeholderTextColor={Color.GRAY}
+            onChangeText={setName}
+            autoCapitalize="words"
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.textInput}
+            autoCapitalize="none"
+            value={emailAddress}
+            placeholder="Enter email"
+            placeholderTextColor={Color.GRAY}
+            onChangeText={setEmailAddress}
+            keyboardType="email-address"
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.textInput}
+            value={password}
+            placeholder="Enter password"
+            placeholderTextColor={Color.GRAY}
+            secureTextEntry={true}
+            onChangeText={setPassword}
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.textInput}
+            value={confirmPassword}
+            placeholder="Confirm password"
+            placeholderTextColor={Color.GRAY}
+            secureTextEntry={true}
+            onChangeText={setConfirmPassword}
+          />
+        </View>
+
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.button} onPress={onSignUpPress}>
+            <Text style={styles.buttonText}>Continue</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.button} onPress={() => router.push("/auth/sign-in")}>
+            <Text style={styles.buttonText}>Sign In</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     padding: 20,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: '#ffffff',
+    justifyContent: 'center',
   },
-  title: {
+  textHeader: {
     fontSize: 24,
     fontWeight: 'bold',
+    textAlign: 'center',
     marginBottom: 20,
+    color: Color.PRIMARY,
   },
-  input: {
-    width: '100%',
+  inputContainer: {
+    marginBottom: 15,
+  },
+  textInput: {
     padding: 12,
     borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    marginBottom: 10,
-    backgroundColor: '#fff',
+    borderRadius: 25,
+    backgroundColor: '#e6f2ff',
+    borderColor: '#cce0ff',
+    fontSize: 16,
+    color: '#000',
+  },
+  buttonContainer: {
+    alignItems: 'center',
+  },
+  button: {
+    backgroundColor: Color.PRIMARY,
+    paddingVertical: 15,
+    borderRadius: 25,
+    marginTop: 20,
+    alignItems: 'center',
+    width: '70%',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
   },
 })
