@@ -13,5 +13,5 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-, "app/auth/sign-up.jsx", "app/auth/sign-in.jsx", "app/(home)/index.jsx", "app/auth/_layout.jsx", "app/(home)/_layout.jsx", "app/layouts/RootLayout.jsx"  ]
+, "app/auth/sign-up.jsx", "app/auth/sign-in.jsx", "app/(home)/index.jsx", "app/auth/_layout.jsx", "app/(home)/_layout.jsx", "app/layouts/RootLayout.jsx", "constant/Color.jsx"  ]
 }

@@ -1,12 +1,26 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import React from "react";
+import React,{useEffect} from "react";
 import { SignedIn, SignedOut, useUser, useClerk } from "@clerk/clerk-expo";
-import { Stack, useRouter } from "expo-router";
+import { Stack, useRouter ,useSegments, useRootNavigationState} from "expo-router";
 import { FontAwesome, Feather } from "@expo/vector-icons";
 import Header from "../../components/header";
 
 export default function LoginScreen() {
   const router = useRouter();
+  const segments = useSegments();
+  const navigationState = useRootNavigationState();
+
+  useEffect(() => {
+    if (!navigationState?.key) {
+      return;
+    }
+
+    const inAuthGroup = segments[0] === "(auth)";
+
+    if (!inAuthGroup) {
+      router.replace("/(tabs)");
+    }
+  }, [navigationState?.key, segments]);
 
   return (
     <>
@@ -42,7 +56,7 @@ export default function LoginScreen() {
       </SignedOut>
 
       <SignedIn>
-        <View style={styles.container}>
+        {/* <View style={styles.container}>
           <View style={styles.container1}>
             <View style={styles.imageContainerChart}>
               <Image
@@ -65,7 +79,9 @@ export default function LoginScreen() {
               </TouchableOpacity>
             </View>
           </View>
-        </View>
+        </View> */}
+
+        
       </SignedIn>
     </>
   );
