@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View ,TouchableOpacity,FlatList} from 'react-native'
 import React from 'react'
-import BottomNav from "../../components/BottomNav"; // Import BottomNav
 import { useRouter } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons"; // Import Icon for Back Button
+import Header from "../../components/header"; 
 
 
 export default function course() {
@@ -17,7 +17,8 @@ export default function course() {
   ];
   return (
     <View>
-      <TouchableOpacity
+      <Header/>
+      {/* <TouchableOpacity
   style={styles.backButton}
   onPress={() => {
     if (router.canGoBack()) {
@@ -28,7 +29,7 @@ export default function course() {
   }}
 >
   <FontAwesome name="arrow-left" size={24} color="black" />
-</TouchableOpacity>
+</TouchableOpacity> */}
 
 <View style={styles.flatListContainer}>
   <FlatList
@@ -56,16 +57,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#ffffff",
   },
-  // backButton: {
-  //   position: "absolute",
-  //   top: 40, // Adjust for better visibility
-  //   left: 20,
-  //   backgroundColor: "#1E73E8",
-  //   padding: 12,
-  //   borderRadius: 30, // Makes it circular
-  //   elevation: 5,
-  //   zIndex: 10, // Ensures it stays above everything
-  // },
+  backButton: {
+    position: "absolute",
+    top: 25, // Adjust for better visibility
+    left: 20,
+    // backgroundColor: "#1E73E8",
+    padding: 10,
+    borderRadius: 10, // Makes it circular
+    elevation: 5,
+    zIndex: 10, // Ensures it stays above everything
+  },
   flatListContainer: {
     marginTop: 40, // Adjust this value as needed
   },

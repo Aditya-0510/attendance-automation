@@ -1,14 +1,16 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
+import Header from "../../components/header";
 
 export default function Attendance() {
   const router = useRouter();
 
   return (
-    <View >
+    <View style={styles.container} >
+      <Header/>
       {/* Back Button */}
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={styles.backButton}
         onPress={() => {
           if (router.canGoBack()) {
@@ -19,7 +21,7 @@ export default function Attendance() {
         }}
       >
         <FontAwesome name="arrow-left" size={24} color="black" />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       {/* Title */}
       <Text style={styles.title}>xx% of classes conducted</Text>
@@ -45,17 +47,17 @@ export default function Attendance() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // padding: 20,
+    padding: 20,
     backgroundColor: "#fff",
   },
-//   backButton: {
-//     position: "absolute",
-//     top: 50,
-//     left: 20,
-//     backgroundColor: "#D0D0D0",
-//     padding: 10,
-//     borderRadius: 10,
-//   },
+  backButton: {
+    position: "absolute",
+    top: 25,
+    left: 20,
+    // backgroundColor: "#D0D0D0",
+    padding: 10,
+    borderRadius: 10,
+  },
   title: {
     marginTop: 80,
     fontSize: 18,

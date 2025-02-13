@@ -31,9 +31,9 @@ export default function LoginScreen() {
         }}
       />
       <SignedIn>
-        <View style={{backgroundColor:"white"}}>
+        {/* <View >
           <Header />
-        </View>
+        </View> */}
       </SignedIn>
       
       <SignedOut>
