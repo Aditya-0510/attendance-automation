@@ -1,13 +1,15 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import React,{useEffect} from "react";
 import { useRouter} from "expo-router";
+import Header from "../../components/header"; 
 
 export default function index() {
     const router = useRouter();
   return (
     <>
-    {/* <Header /> */}
     <View style={styles.container}>
+    <Header />
+    
           <View style={styles.container1}>
             <View style={styles.imageContainerChart}>
               <Image
@@ -40,15 +42,15 @@ export default function index() {
 
 
     const styles = StyleSheet.create({
-        signedOutContainer: {
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          padding: 20,
-          backgroundColor: "#D0C8F2",
-          width: '100%',
-          height: '100%'
-        },
+        // signedOutContainer: {
+        //   flex: 1,
+        //   justifyContent: "center",
+        //   alignItems: "center",
+        //   padding: 20,
+        //   backgroundColor: "#D0C8F2",
+        //   width: '100%',
+        //   height: '100%'
+        // },
         container: {
           flex: 1,
           justifyContent: "center",

@@ -9,18 +9,18 @@ export default function header() {
         <View style={styles.headerContainer}>
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => router.push("/")}>
-                    <FontAwesome name="arrow-left" size={24} color="white" />
+                    <FontAwesome name="arrow-left" size={24} color="black" />
                 </TouchableOpacity>
                 <View style={styles.headerRightIcons}>
                     <TouchableOpacity 
                         style={styles.iconSpacing}
                         onPress={() => router.push("pages/notification")}
                     >
-                        <Feather name="bell" size={24} color="white" />
+                        <Feather name="bell" size={24} color="black" />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => router.push("pages/menu")}>
+                    {/* <TouchableOpacity onPress={() => router.push("pages/menu")}>
                         <FontAwesome name="user-circle-o" size={24} color="white" />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
             </View>
         </View>
@@ -31,8 +31,11 @@ const styles = StyleSheet.create({
     headerContainer: {
         paddingHorizontal: 20, // Adds padding on both sides
         width: '100%',
-        backgroundColor:"#1E73E8",
+        // backgroundColor:"#1E73E8",
         height:50,
+        top:'40',
+        left:'10',
+        zIndex:10
     },
     header: {
         flexDirection: "row",
